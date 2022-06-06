@@ -1,0 +1,5 @@
+CLIENT_ID = "a67be06ece4246a98d48c1b0f406f4c2"
+REDIRECT_URI = "http://127.0.0.1:8000/user/spotify_callback/"
+RESPONSE_TYPE = "code"
+SCOPE = "user-read-private user-read-email user-read-recently-played user-top-read user-follow-read user-follow-modify playlist-read-private playlist-read-collaborative playlist-modify-public"
+CLIENT_SECRET = "637b60241e834777934d60d5b0e480a7"

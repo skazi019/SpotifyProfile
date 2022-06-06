@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %}
+<div class="h-screen w-screen flex justify-center items-center bg-zinc-800">
+	<button class="py-4 px-6 bg-green-500 md:bg-green-600 rounded-full md:hover:bg-green-500"
+		onclick="window.location.href='{{ login_url }}'">
+		Log in with Spotify
+	</button>
+</div>
+{% endblock content %}

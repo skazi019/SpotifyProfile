@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="flex h-screen w-screen" x-data="{
+    openTab: 'profile',
+    activeClasses: 'border-l-4 border-green-500 bg-green-800/30 text-white',    
+}">
+    {% include 'navbar.html' %}
+    {% include 'content.html' %}
+</div>
+
+{% endblock content %}
