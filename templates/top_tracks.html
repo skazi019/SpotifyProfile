@@ -1,3 +1,89 @@
-<div class="" x-show="openTab === 'top_tracks'">
-    <h1>Top Tracks</h1>
-</div>
+{% load custom_filters %}
+
+<!-- Content section (Copy this for all pages) -->
+<main class="font-sans mt-8 md:mt-20 mb-4 md:mb-20 w-full md:max-w-5xl md:mx-auto px-6"
+    x-show="openTab === 'top_tracks'"
+    x-data="{duration: 'long', activeClasses: 'text-white font-semibold underline underline-offset-2'}">
+
+    <!-- Heading and tabs -->
+    <header class="flex flex-col justify-center items-center md:flex-row md:justify-between md:items-center">
+        <h1 class="font-semibold text-2xl">Top Tracks</h1>
+
+        <!-- Tabs -->
+        <div class="mt-6 md:mt-0 flex flex-row justify-center items-center gap-4">
+            <button class="" @click="duration = 'short'"
+                :class="duration === 'short'? activeClasses : 'text-gray-400'">Last 4 weeks</button>
+            <button class="" @click="duration = 'medium'"
+                :class="duration === 'medium'? activeClasses : 'text-gray-400'">Last 6 months</button>
+            <button class="" @click="duration = 'long'"
+                :class="duration === 'long'? activeClasses : 'text-gray-400'">All time</button>
+        </div>
+    </header>
+
+    <!-- Short Data -->
+    <div class="mt-10 md:mt-20 w-full flex flex-col gap-8" x-show="duration === 'short'">
+        {% for track in tracks_data_short %}
+        <div class="flex flex-row justify-between items-center hover:bg-gray-500/30 rounded-md p-2">
+            <div class="flex flex-row items-center gap-4">
+                <img src="{{track.album.images.0.url}}" alt="artist image" class="h-12 w-12 md:h-14 md:w-14">
+                <div class="flex flex-col items-start justify-center">
+                    <h1 class="font-light">{{track.name}}</h1>
+                    <div class="flex flex-row justify-between items-center gap-2">
+                        <p class="text-xs text-gray-400 font-light">{{track.artists.0.name}}</p>
+                        <div class="bg-gray-400 w-1 h-1 rounded-full"></div>
+                        <p class="text-xs text-gray-400 font-light">{{track.album.name}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track duration -->
+            <p class="text-xs text-gray-400">{{track.duration_ms|ms_to_m_s}}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Medium Data -->
+    <div class="mt-10 md:mt-20 w-full flex flex-col gap-8" x-show="duration === 'medium'">
+        {% for track in tracks_data_medium %}
+        <div class="flex flex-row justify-between items-center hover:bg-gray-500/30 rounded-md p-2">
+            <div class="flex flex-row items-center gap-4">
+                <img src="{{track.album.images.0.url}}" alt="artist image" class="h-12 w-12 md:h-14 md:w-14">
+                <div class="flex flex-col items-start justify-center">
+                    <h1 class="font-light">{{track.name}}</h1>
+                    <div class="flex flex-row justify-between items-center gap-2">
+                        <p class="text-xs text-gray-400 font-light">{{track.artists.0.name}}</p>
+                        <div class="bg-gray-400 w-1 h-1 rounded-full"></div>
+                        <p class="text-xs text-gray-400 font-light">{{track.album.name}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track duration -->
+            <p class="text-xs text-gray-400">{{track.duration_ms|ms_to_m_s}}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Long Data -->
+    <div class="mt-10 md:mt-20 w-full flex flex-col gap-8" x-show="duration === 'long'">
+        {% for track in tracks_data_long %}
+        <div class="flex flex-row justify-between items-center hover:bg-gray-500/30 rounded-md p-2">
+            <div class="flex flex-row items-center gap-4">
+                <img src="{{track.album.images.0.url}}" alt="artist image" class="h-12 w-12 md:h-14 md:w-14">
+                <div class="flex flex-col items-start justify-center">
+                    <h1 class="font-light">{{track.name}}</h1>
+                    <div class="flex flex-row justify-between items-center gap-2">
+                        <p class="text-xs text-gray-400 font-light">{{track.artists.0.name}}</p>
+                        <div class="bg-gray-400 w-1 h-1 rounded-full"></div>
+                        <p class="text-xs text-gray-400 font-light">{{track.album.name}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track duration -->
+            <p class="text-xs text-gray-400">{{track.duration_ms|ms_to_m_s}}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</main>

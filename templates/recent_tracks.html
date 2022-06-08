@@ -1,3 +1,35 @@
-<div class="" x-show="openTab === 'recent_tracks'">
-    <h1>Recent Tracks</h1>
-</div>
+{% load custom_filters %}
+
+<!-- Content section (Copy this for all pages) -->
+<main class="font-sans mt-8 md:mt-20 mb-4 md:mb-20 w-full md:max-w-5xl md:mx-auto px-6"
+    x-show="openTab === 'recent_tracks'"
+    x-data="{duration: 'long', activeClasses: 'text-white font-semibold underline underline-offset-2'}">
+
+    <!-- Heading and tabs -->
+    <header class="flex flex-col justify-center items-center md:flex-row md:justify-between md:items-center">
+        <h1 class="font-semibold text-2xl">Recent Tracks</h1>
+    </header>
+
+    <!-- Tracks -->
+    <div class="mt-10 md:mt-20 w-full flex flex-col gap-8">
+        {% for track in recent_tracks %}
+        <div class="flex flex-row justify-between items-center hover:bg-gray-500/30 rounded-md p-2">
+            <div class="flex flex-row items-center gap-4">
+                <img src="{{track.track.album.images.0.url}}" alt="artist image" class="h-12 w-12 md:h-14 md:w-14">
+                <div class="flex flex-col items-start justify-center">
+                    <h1 class="font-light">{{track.track.name}}</h1>
+                    <div class="flex flex-row justify-between items-center gap-2">
+                        <p class="text-xs text-gray-400 font-light">{{track.track.artists.0.name}}</p>
+                        <div class="bg-gray-400 w-1 h-1 rounded-full"></div>
+                        <p class="text-xs text-gray-400 font-light">{{track.track.album.name}}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Track duration -->
+            <p class="text-xs text-gray-400">{{track.track.duration_ms|ms_to_m_s}}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+</main>

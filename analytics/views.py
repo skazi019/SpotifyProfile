@@ -193,7 +193,7 @@ def user_profile(request):
     user_data = request.session.get("user_data")
     artists_data = request.session.get("top_artists_long")["items"][:10]
     track_data = request.session.get("top_tracks_long")["items"][:10]
-    recent_tracks = request.session.get("recent_tracks")
+    recent_tracks = request.session.get("recent_tracks")["items"]
 
     artists_data_long = request.session.get("top_artists_long")["items"]
     artists_data_medium = request.session.get("top_artists_medium")["items"]
