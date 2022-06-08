@@ -2,10 +2,14 @@
 
 {% block content %}
 {% load static %}
-<div class="h-screen w-screen flex justify-center items-center bg-zinc-800">
-	<button class="py-4 px-6 bg-green-500 md:bg-green-600 rounded-full md:hover:bg-green-500"
-		onclick="window.location.href='{{ login_url }}'">
+<div class="h-screen w-screen flex justify-center items-center bg-zinc-800" x-data="{loader: 0}">
+	<a href={{login_url}} @click="loader = 1" x-show="loader === 0"
+		class="py-4 px-6 bg-green-500 rounded-full font-semibold md:bg-green-600 md:hover:bg-green-500  transition duration-300 ease-in-out">
 		Log in with Spotify
-	</button>
+	</a>
+	<a x-show="loader === 1"
+		class="py-4 px-6 bg-green-500 rounded-full font-semibold transition duration-300 ease-in-out">
+		<span class="iconify w-6 h-6" data-icon="eos-icons:loading" data-width="80" data-height="80"></span>
+	</a>
 </div>
 {% endblock content %}

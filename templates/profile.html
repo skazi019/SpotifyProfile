@@ -1,3 +1,97 @@
-<div class="" x-show="openTab === 'profile'">
-    <h1>Profile page</h1>
+{% load custom_filters %}
+
+<!-- Content section (Copy this for all pages) -->
+<div class="font-sans mt-8 md:mt-20 mb-4 md:mb-20 w-full md:max-w-5xl md:mx-auto px-6" x-show="openTab === 'profile'">
+
+    <!-- Header section -->
+    <div class="flex flex-col justify-center items-center">
+
+        <!-- Profile image -->
+        <img src="{{user_data.images.0.url}}" alt="profile image" class="rounded-full h-36 w-36">
+
+        <!-- User display name -->
+        <a href="{{user_data.external_urls.spotify}}" class="mt-8">
+            <h1 class="text-3xl md:text-5xl font-semibold hover:text-green-500 transition duration-300 ease-in-out">
+                {{user_data.display_name}}
+            </h1>
+        </a>
+        <h3 class="text-sm text-gray-500 tracking-wider font-light">{{user_data.product|upper}}</h3>
+
+        <!-- Profile Metrics -->
+        <div class="flex flex-row items-center mt-6">
+
+            <!-- Followers -->
+            <div class="flex flex-col justify-center items-center">
+                <h1 class="text-lg font-semibold text-green-500">{{user_data.followers.total}}</h1>
+                <span class="text-xs font-light text-gray-400">FOLLOWERS</span>
+            </div>
+        </div>
+
+        <!-- Logout -->
+        <a href="{% url 'logout' %}"
+            class="mt-8 py-2 px-10 border border-gray-200 text-sm rounded-full font-normal tracking-wider hover:bg-gray-200 hover:text-black transition duration-300 ease-in-out">LOGOUT</a>
+    </div>
+
+    <!-- Spotify data -->
+    <div class="mt-20 grid grid-cols-1 md:grid-cols-2 justify-between gap-12">
+
+        <!-- Artists Section -->
+        <div class="flex flex-col gap-8">
+
+            <!-- Heading -->
+            <div class="flex flex-row justify-between items-center">
+                <h1 class="font-bold text-md md:text-xl">Top Artists of All Time</h1>
+                <button
+                    class="py-2 px-4 border border-gray-200 text-sm rounded-full font-normal tracking-wider hover:bg-gray-200 hover:text-black transition duration-300 ease-in-out">SEE
+                    MORE</button>
+            </div>
+
+            <!-- artists -->
+            <div class="flex flex-col gap-10">
+                {% for artist in artists_data %}
+                <div class="flex flex-row items-center gap-4">
+                    <img src="{{artist.images.0.url}}" alt="artist image"
+                        class="h-12 w-12 md:h-14 md:w-14 rounded-full">
+                    <h1 class="font-light">{{artist.name}}</h1>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Tracks Section -->
+        <div class="flex flex-col gap-8">
+
+            <!-- Heading -->
+            <div class="flex flex-row justify-between items-center">
+                <h1 class="font-bold text-md md:text-xl">Top Tracks of All Time</h1>
+                <button
+                    class="py-2 px-4 border border-gray-200 text-sm rounded-full font-normal tracking-wider hover:bg-gray-200 hover:text-black transition duration-300 ease-in-out">SEE
+                    MORE</button>
+            </div>
+
+            <!-- Tracks -->
+            <div class="flex flex-col gap-10">
+                {% for track in track_data %}
+                <div class="flex flex-row justify-between items-center">
+                    <div class="flex flex-row items-center gap-4">
+                        <img src="{{track.album.images.0.url}}" alt="artist image" class="h-12 w-12 md:h-14 md:w-14">
+                        <div class="flex flex-col items-start justify-center">
+                            <h1 class="font-light">{{track.name}}</h1>
+                            <div class="flex flex-row justify-between items-center gap-2">
+                                <p class="text-xs text-gray-400 font-light">{{track.artists.0.name}}</p>
+                                <div class="bg-gray-400 w-1 h-1 rounded-full"></div>
+                                <p class="text-xs text-gray-400 font-light">{{track.album.name}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Track duration -->
+                    <p class="text-xs text-gray-400">{{track.duration_ms|ms_to_m_s}}</p>
+                </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+
 </div>

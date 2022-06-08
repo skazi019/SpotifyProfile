@@ -13,13 +13,18 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Importing AplineJS -->
-    <script src="//unpkg.com/alpinejs" defer></script>
+    <script src="https://unpkg.com/alpinejs" defer></script>
+
+    <!-- Importing HTMX -->
+    <script src="https://unpkg.com/htmx.org@1.7.0"
+        integrity="sha384-EzBXYPt0/T6gxNp0nuPtLkmRpmDBbjg6WmCUZRLXBBwYYmwAUxzlSGej0ARHX0Bo"
+        crossorigin="anonymous"></script>
 
     <!-- Importing the iconify -->
     <script src="https://code.iconify.design/2/2.2.1/iconify.min.js"></script>
 </head>
 
-<body>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
 
     {% block content %}
     {% endblock content %}

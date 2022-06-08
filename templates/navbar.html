@@ -2,7 +2,7 @@
 
 <!--  Navbar -->
 <nav
-    class="absolute md:relative bottom-0 w-screen md:w-24 md:h-screen bg-black flex flex-row md:flex-col justify-between md:px-0 md:py-4">
+    class="fixed left-0 bottom-0 md:top-0 w-screen md:w-24 md:h-screen bg-black flex flex-row md:flex-col justify-between md:px-0 md:py-4">
 
     <!-- Logo -->
     <div class="hidden md:flex flex-col items-center mt-4">
@@ -14,21 +14,21 @@
 
         <!-- Profile -->
         <div @click="openTab = 'profile'" :class="openTab === 'profile'? activeClasses : ''"
-            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
+            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 md:border-t-0 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
             <span class="iconify w-6 h-6" data-icon="bxs:user" data-width="40" data-height="40"></span>
             <p class="text-xs mt-1">Profile</p>
         </div>
 
         <!-- Top Artists -->
         <div @click="openTab = 'top_artists'" :class="openTab === 'top_artists'? activeClasses : ''"
-            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
+            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 md:border-t-0 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
             <span class="iconify w-6 h-6" data-icon="entypo:modern-mic" data-width="40" data-height="40"></span>
             <p class="text-xs mt-1">Top Artists</p>
         </div>
 
         <!-- Top Tracks -->
         <div @click="openTab = 'top_tracks'" :class="openTab === 'top_tracks'? activeClasses : ''"
-            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
+            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 md:border-t-0 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
             <span class="iconify w-6 h-6" data-icon="fluent:music-note-2-16-filled" data-width="40"
                 data-height="40"></span>
             <p class="text-xs mt-1">Top Tracks</p>
@@ -36,14 +36,14 @@
 
         <!-- Recent Tracks -->
         <div @click="openTab = 'recent_tracks'" :class="openTab === 'recent_tracks'? activeClasses : ''"
-            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
+            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 md:border-t-0 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
             <span class="iconify w-6 h-6" data-icon="carbon:recently-viewed" data-width="40" data-height="40"></span>
             <p class="text-xs mt-1">Recent</p>
         </div>
 
         <!-- Playlists -->
         <div @click="openTab = 'playlists'" :class="openTab === 'playlists'? activeClasses : ''"
-            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
+            class="w-full py-4 flex flex-col items-center justify-center transition duration-300 ease-in-out cursor-pointer border-t-4 md:border-l-4 md:border-t-0 border-black hover:border-green-500 hover:bg-green-800/30 text-zinc-400 hover:text-white ">
             <span class="iconify w-6 h-6" data-icon="mdi:playlist-music" data-width="40" data-height="40"></span>
             <p class="text-xs mt-1">Playlists</p>
         </div>

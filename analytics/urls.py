@@ -1,20 +1,17 @@
+from cmath import log
 from django.urls import path
 from .views import (
-    artist_page,
     get_album,
     login,
-    recent_page,
     spotify_callback,
-    track_page,
     user_profile,
+    logout,
 )
 
 urlpatterns = [
     path("", login, name="login"),
     path("spotify_callback/", spotify_callback, name="spotify_callback"),
-    path("profile", user_profile, name="user_profile"),
-    path("artists", artist_page, name="artists"),
-    path("tracks", track_page, name="tracks"),
-    path("album/<str:id>", get_album, name="album"),
-    path("recent-tracks", recent_page, name="recent_tracks"),
+    path("profile/", user_profile, name="user_profile"),
+    path("album/<str:id>/", get_album, name="album"),
+    path("logout/", logout, name="logout"),
 ]

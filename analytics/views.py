@@ -4,18 +4,15 @@ import json
 import os
 from django.shortcuts import render, redirect
 
-# from .credentials import CLIENT_ID, REDIRECT_URI, RESPONSE_TYPE, SCOPE, CLIENT_SECRET
-from dotenv import load_dotenv
+from dotenv import load_dotenv, find_dotenv
 
-print(f"Current fiel path: {os.path.dirname(__file__)}")
-dotenv_path = os.path.join("../", ".env")
-load_dotenv(dotenv_path=dotenv_path)
+load_dotenv(find_dotenv())
 
 
 def login(request):
     if not request.session.exists(request.session.session_key):
         request.session.create()
-        request.session.set_expiry(3600)  # setting expiry to 5 mins
+        request.session.set_expiry(600)  # setting expiry to 10 mins
     else:
         return redirect("user_profile")
 
@@ -63,6 +60,8 @@ def spotify_callback(request):
         request.session.flush()
         return redirect("login")
 
+    request.session["access_token"] = access_token
+
     request.session["user_data"] = get_user_profile_data(access_token=access_token)
 
     artists_data = get_top_artists(access_token=access_token)
@@ -83,11 +82,17 @@ def spotify_callback(request):
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
-    )["items"]
+    )
 
     return redirect("user_profile")
 
 
+def logout(request):
+    request.session.flush()
+    return redirect("login")
+
+
+# Utility function for user data
 def get_user_profile_data(access_token):
     userProfile = requests.get(
         "https://api.spotify.com/v1/me",
@@ -98,19 +103,10 @@ def get_user_profile_data(access_token):
     )
 
     userProfile = json.loads(userProfile.text)
-    context = {
-        "name": userProfile["display_name"],
-        "email": userProfile["email"],
-        "followers": userProfile["followers"]["total"],
-        "spotify_page": userProfile["external_urls"]["spotify"],
-        "id": userProfile["id"],
-        "profileimage": userProfile["images"][0]["url"],
-        "product": userProfile["product"],
-        "type": userProfile["type"],
-    }
-    return context
+    return userProfile
 
 
+# Utility function for artist data
 def get_top_artists(access_token, limit=20):
     top_artists_short = json.loads(
         requests.get(
@@ -143,6 +139,7 @@ def get_top_artists(access_token, limit=20):
     return [top_artists_short, top_artists_medium, top_artists_long]
 
 
+# Utility funtion for track data
 def get_top_tracks(access_token, limit=20):
     top_tracks_short = json.loads(
         requests.get(
@@ -175,6 +172,7 @@ def get_top_tracks(access_token, limit=20):
     return [top_tracks_short, top_tracks_medium, top_tracks_long]
 
 
+# Renders home page
 def user_profile(request):
     if not request.session.exists(request.session.session_key):
         return redirect("login")
@@ -195,6 +193,17 @@ def user_profile(request):
     user_data = request.session.get("user_data")
     artists_data = request.session.get("top_artists_long")["items"][:10]
     track_data = request.session.get("top_tracks_long")["items"][:10]
+    recent_tracks = request.session.get("recent_tracks")
+
+    artists_data_long = request.session.get("top_artists_long")["items"]
+    artists_data_medium = request.session.get("top_artists_medium")["items"]
+    artists_data_short = request.session.get("top_artists_short")["items"]
+
+    tracks_data_long = request.session.get("top_tracks_long")["items"]
+    tracks_data_medium = request.session.get("top_tracks_medium")["items"]
+    tracks_data_short = request.session.get("top_tracks_short")["items"]
+
+    # need to send all data here
 
     return render(
         request,
@@ -203,105 +212,37 @@ def user_profile(request):
             "user_data": user_data,
             "artists_data": artists_data,
             "track_data": track_data,
+            "recent_tracks": recent_tracks,
+            "artists_data_long": artists_data_long,
+            "artists_data_medium": artists_data_medium,
+            "artists_data_short": artists_data_short,
+            "tracks_data_long": tracks_data_long,
+            "tracks_data_medium": tracks_data_medium,
+            "tracks_data_short": tracks_data_short,
         },
     )
 
 
-def artist_page(request):
-    if not request.session.exists(request.session.session_key):
+# Renders album page
+def get_album(request, id):
+    if not request.session.exists(request.session.access_token):
+        request.session.flush()
         return redirect("login")
+    else:
+        access_token = request.session.get("access_token")
 
     try:
-        if not (
-            request.session.get("user_data")
-            and request.session.get("top_artists_short")
-            and request.session.get("top_tracks_short")
-        ):
-            print("Data not found in request")
-            request.session.flush()
-            return redirect("login")
+        albumData = json.loads(
+            requests.get(
+                f"https://api.spotify.com/v1/albums/{id}",
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {access_token}",
+                },
+            ).text
+        )
     except Exception as e:
         request.session.flush()
         return redirect("login")
-
-    artists_data_long = request.session.get("top_artists_long")["items"]
-    artists_data_medium = request.session.get("top_artists_medium")["items"]
-    artists_data_short = request.session.get("top_artists_short")["items"]
-    return render(
-        request,
-        "artists.html",
-        {
-            "artists_data_short": artists_data_short,
-            "artists_data_medium": artists_data_medium,
-            "artists_data_long": artists_data_long,
-        },
-    )
-
-
-def track_page(request):
-    if not request.session.exists(request.session.session_key):
-        return redirect("login")
-    try:
-        token = SpotifyTokens.objects.get(sesssionkey=request.session.session_key)
-    except SpotifyTokens.DoesNotExist:
-        request.session.flush()
-        return redirect("login")
-
-    tracks_data_long = token.top_tracks_long["items"]
-    tracks_data_medium = token.top_tracks_medium["items"]
-    tracks_data_short = token.top_tracks_short["items"]
-    return render(
-        request,
-        "tracks.html",
-        {
-            "tracks_data_short": tracks_data_short,
-            "tracks_data_medium": tracks_data_medium,
-            "tracks_data_long": tracks_data_long,
-        },
-    )
-
-
-def recent_page(request):
-    if not request.session.exists(request.session.session_key):
-        return redirect("login")
-    try:
-        token = SpotifyTokens.objects.get(sesssionkey=request.session.session_key)
-        access_token = token.access_token
-    except SpotifyTokens.DoesNotExist:
-        request.session.flush()
-        return redirect("login")
-
-    recent_tracks = json.loads(
-        requests.get(
-            f"https://api.spotify.com/v1/me/player/recently-played?limit=30",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {access_token}",
-            },
-        ).text
-    )["items"]
-
-    return render(request, "recent_tracks.html", {"recent_tracks": recent_tracks})
-
-
-def get_album(request, id):
-    if not request.session.exists(request.session.session_key):
-        return redirect("login")
-    try:
-        token = SpotifyTokens.objects.get(sesssionkey=request.session.session_key)
-        access_token = token.access_token
-    except SpotifyTokens.DoesNotExist:
-        request.session.flush()
-        return redirect("login")
-
-    albumData = json.loads(
-        requests.get(
-            f"https://api.spotify.com/v1/albums/{id}",
-            headers={
-                "Content-Type": "application/json",
-                "Authorization": f"Bearer {access_token}",
-            },
-        ).text
-    )
 
     return render(request, "album.html", {"albumData": albumData})
