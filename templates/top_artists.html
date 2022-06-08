@@ -23,7 +23,7 @@
     <!-- Short Data -->
     <div class="mt-10 md:mt-20 w-full flex flex-row flex-wrap gap-10" x-show="duration === 'short'">
         {% for artist in artists_data_short %}
-        <div class="flex flex-col justify-center items-center grow hover:bg-gray-500/30 rounded-md py-10">
+        <div class="flex flex-col justify-center items-center grow md:hover:bg-gray-500/30 md:rounded-md md:py-10">
             <img src="{{artist.images.0.url}}" alt="artist image" class="h-32 w-32 md:h-56 md:w-56 rounded-full">
             <span class="mt-2 font-light text-gray-300">{{artist.name}}</span>
         </div>
@@ -33,7 +33,7 @@
     <!-- Medium Data -->
     <div class="mt-10 md:mt-20 w-full flex flex-row flex-wrap gap-10" x-show="duration === 'medium'">
         {% for artist in artists_data_medium %}
-        <div class="flex flex-col justify-center items-center grow hover:bg-gray-500/30 rounded-md py-10">
+        <div class="flex flex-col justify-center items-center grow md:hover:bg-gray-500/30 md:rounded-md md:py-10">
             <img src="{{artist.images.0.url}}" alt="artist image" class="h-32 w-32 md:h-56 md:w-56 rounded-full">
             <span class="mt-2 font-light text-gray-300">{{artist.name}}</span>
         </div>
@@ -43,7 +43,7 @@
     <!-- Long Data -->
     <div class="mt-10 md:mt-20 w-full flex flex-row flex-wrap gap-10" x-show="duration === 'long'">
         {% for artist in artists_data_long %}
-        <div class="flex flex-col justify-center items-center grow hover:bg-gray-500/30 rounded-md py-10">
+        <div class="flex flex-col justify-center items-center grow md:hover:bg-gray-500/30 md:rounded-md md:py-10">
             <img src="{{artist.images.0.url}}" alt="artist image" class="h-32 w-32 md:h-56 md:w-56 rounded-full">
             <span class="mt-2 font-light text-gray-300">{{artist.name}}</span>
         </div>
