@@ -1,4 +1,5 @@
 import datetime
+from re import template
 import requests
 import json
 import os
@@ -219,6 +220,42 @@ def user_profile(request):
             "tracks_data_long": tracks_data_long,
             "tracks_data_medium": tracks_data_medium,
             "tracks_data_short": tracks_data_short,
+        },
+    )
+
+
+# Renders track page
+def get_track(request, id):
+    access_token = request.session.get("access_token")
+    track_data = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/tracks/{id}",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )
+    track_features = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/audio-features/{id}",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )
+
+    if "error" in track_data or "error" in track_features:
+        request.session.flush()
+        return redirect("login")
+
+    return render(
+        request=request,
+        template_name="track_details.html",
+        context={
+            "track_data": track_data,
+            "track_features": track_features,
         },
     )
 

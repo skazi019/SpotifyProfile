@@ -72,22 +72,25 @@
             <!-- Tracks -->
             <div class="flex flex-col gap-10">
                 {% for track in track_data %}
-                <div class="flex flex-row justify-between items-center">
-                    <div class="flex flex-row items-center gap-4">
-                        <img src="{{track.album.images.0.url}}" alt="artist image" class="h-12 w-12 md:h-14 md:w-14">
-                        <div class="flex flex-col items-start justify-center">
-                            <h1 class="font-light">{{track.name}}</h1>
-                            <div class="flex flex-row justify-between items-center gap-2">
-                                <p class="text-xs text-gray-400 font-light">{{track.artists.0.name}}</p>
-                                <div class="bg-gray-400 w-1 h-1 rounded-full"></div>
-                                <p class="text-xs text-gray-400 font-light">{{track.album.name}}</p>
+                <a href="{% url 'get_track' track.id %}">
+                    <div class="flex flex-row justify-between items-center">
+                        <div class="flex flex-row items-center gap-4">
+                            <img src="{{track.album.images.0.url}}" alt="artist image"
+                                class="h-12 w-12 md:h-14 md:w-14">
+                            <div class="flex flex-col items-start justify-center">
+                                <h1 class="font-light">{{track.name}}</h1>
+                                <div class="flex flex-row justify-between items-center gap-2">
+                                    <p class="text-xs text-gray-400 font-light">{{track.artists.0.name}}</p>
+                                    <div class="bg-gray-400 w-1 h-1 rounded-full"></div>
+                                    <p class="text-xs text-gray-400 font-light">{{track.album.name}}</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                    <!-- Track duration -->
-                    <p class="text-xs text-gray-400">{{track.duration_ms|ms_to_m_s}}</p>
-                </div>
+                        <!-- Track duration -->
+                        <p class="text-xs text-gray-400">{{track.duration_ms|ms_to_m_s}}</p>
+                    </div>
+                </a>
                 {% endfor %}
             </div>
 

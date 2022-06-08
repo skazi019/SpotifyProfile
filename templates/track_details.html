@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load custom_filters %}
+
+<div class="flex h-auto w-screen">
+    <main class="w-full h-full pb-24 md:pb-0 md:pl-24 flex-1 bg-neutral-900 text-white flex justify-center">
+        <header>
+            <a href="{{request.META.HTTP_REFERER}}">Go back</a>
+        </header>
+        <div>
+            <h1>Track data</h1>
+            <p>image: {{track_data.album.images.0.url}}</p>
+            <p>album name: {{track_data.album.name}}</p>
+            <p>artist: {{track_data.artists.0.name}}</p>
+            {% if 'images' in track_data.artists.0 %}
+            <p>artist image: {{track_data.artists.0.images}}</p>
+            {% endif %}
+            <p>duration: {{track_data.duration_ms|ms_to_m_s}}</p>
+            <p>popularity: {{track_data.popularity}}</p>
+            <p>preview url: {{track_data.preview_url}}</p>
+        </div>
+        <!-- <div>{{track_features}}</div> -->
+    </main>
+</div>
+
+{% endblock content %}
