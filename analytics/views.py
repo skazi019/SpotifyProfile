@@ -196,14 +196,6 @@ def user_profile(request):
     track_data = request.session.get("top_tracks_long")["items"][:10]
     recent_tracks = request.session.get("recent_tracks")["items"]
 
-    artists_data_long = request.session.get("top_artists_long")["items"]
-    artists_data_medium = request.session.get("top_artists_medium")["items"]
-    artists_data_short = request.session.get("top_artists_short")["items"]
-
-    tracks_data_long = request.session.get("top_tracks_long")["items"]
-    tracks_data_medium = request.session.get("top_tracks_medium")["items"]
-    tracks_data_short = request.session.get("top_tracks_short")["items"]
-
     # need to send all data here
 
     return render(
@@ -214,12 +206,87 @@ def user_profile(request):
             "artists_data": artists_data,
             "track_data": track_data,
             "recent_tracks": recent_tracks,
-            "artists_data_long": artists_data_long,
-            "artists_data_medium": artists_data_medium,
-            "artists_data_short": artists_data_short,
+        },
+    )
+
+
+# Renders top tracks page
+def top_tracks_page(request):
+    if not request.session.exists(request.session.session_key):
+        return redirect("login")
+
+    try:
+        if not (request.session.get("top_artists_short")):
+            print("Data not found in request")
+            request.session.flush()
+            return redirect("login")
+    except Exception as e:
+        request.session.flush()
+        return redirect("login")
+
+    tracks_data_long = request.session.get("top_tracks_long")["items"]
+    tracks_data_medium = request.session.get("top_tracks_medium")["items"]
+    tracks_data_short = request.session.get("top_tracks_short")["items"]
+
+    return render(
+        request,
+        "top_tracks.html",
+        {
             "tracks_data_long": tracks_data_long,
             "tracks_data_medium": tracks_data_medium,
             "tracks_data_short": tracks_data_short,
+        },
+    )
+
+
+def top_artists_page(request):
+    if not request.session.exists(request.session.session_key):
+        return redirect("login")
+
+    try:
+        if not (request.session.get("top_artists_short")):
+            print("Data not found in request")
+            request.session.flush()
+            return redirect("login")
+    except Exception as e:
+        request.session.flush()
+        return redirect("login")
+
+    artists_data_long = request.session.get("top_artists_long")["items"]
+    artists_data_medium = request.session.get("top_artists_medium")["items"]
+    artists_data_short = request.session.get("top_artists_short")["items"]
+
+    return render(
+        request=request,
+        template_name="top_artists.html",
+        context={
+            "artists_data_long": artists_data_long,
+            "artists_data_medium": artists_data_medium,
+            "artists_data_short": artists_data_short,
+        },
+    )
+
+
+def recent_tracks_page(request):
+    if not request.session.exists(request.session.session_key):
+        return redirect("login")
+
+    try:
+        if not (request.session.get("top_artists_short")):
+            print("Data not found in request")
+            request.session.flush()
+            return redirect("login")
+    except Exception as e:
+        request.session.flush()
+        return redirect("login")
+
+    recent_tracks = request.session.get("recent_tracks")["items"]
+
+    return render(
+        request=request,
+        template_name="recent_tracks.html",
+        context={
+            "recent_tracks": recent_tracks,
         },
     )
 
