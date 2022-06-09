@@ -12,6 +12,7 @@
             <h1>Track data</h1>
             <p>image: {{track_data.album.images.0.url}}</p>
             <p>album name: {{track_data.album.name}}</p>
+            <p>track name: {{track_data.name}}</p>
             <p>artist: {{track_data.artists.0.name}}</p>
             {% if 'images' in track_data.artists.0 %}
             <p>artist image: {{track_data.artists.0.images}}</p>
