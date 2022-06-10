@@ -352,6 +352,16 @@ def get_artist(request, id):
         ).text
     )
 
+    artist_releated_artists = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/artists/{id}/related-artists",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )["artists"]
+
     # No genre key in the artists key in the track_data hence can't call
     # the recommendations API
 
@@ -364,6 +374,7 @@ def get_artist(request, id):
         template_name="artist_details.html",
         context={
             "artist": artist,
+            "related_artists": artist_releated_artists,
         },
     )
 

@@ -6,7 +6,9 @@
 
     <!-- Logo -->
     <div class="hidden md:flex flex-col items-center mt-4">
-        <img src="{% static 'spotify_icon_green.png' %}" class="w-12 h-12" alt="Logo" />
+        <a href="{% url 'user_profile' %}">
+            <img src="{% static 'spotify_icon_green.png' %}" class="w-12 h-12" alt="Logo" />
+        </a>
     </div>
 
     <!-- Menu -->
