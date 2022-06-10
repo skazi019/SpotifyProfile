@@ -13,7 +13,7 @@ load_dotenv(find_dotenv())
 def login(request):
     if not request.session.exists(request.session.session_key):
         request.session.create()
-        request.session.set_expiry(600)  # setting expiry to 10 mins
+        request.session.set_expiry(6000)  # setting expiry to 10 mins
     else:
         return redirect("user_profile")
 
@@ -77,7 +77,7 @@ def spotify_callback(request):
 
     request.session["recent_tracks"] = json.loads(
         requests.get(
-            f"https://api.spotify.com/v1/me/player/recently-played?limit=30",
+            f"https://api.spotify.com/v1/me/player/recently-played?limit=50",
             headers={
                 "Content-Type": "application/json",
                 "Authorization": f"Bearer {access_token}",
@@ -108,7 +108,7 @@ def get_user_profile_data(access_token):
 
 
 # Utility function for artist data
-def get_top_artists(access_token, limit=20):
+def get_top_artists(access_token, limit=50):
     top_artists_short = json.loads(
         requests.get(
             f"https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit={limit}",
@@ -141,7 +141,7 @@ def get_top_artists(access_token, limit=20):
 
 
 # Utility funtion for track data
-def get_top_tracks(access_token, limit=20):
+def get_top_tracks(access_token, limit=50):
     top_tracks_short = json.loads(
         requests.get(
             f"https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit={limit}",
@@ -192,8 +192,8 @@ def user_profile(request):
         return redirect("login")
 
     user_data = request.session.get("user_data")
-    artists_data = request.session.get("top_artists_long")["items"][:10]
-    track_data = request.session.get("top_tracks_long")["items"][:10]
+    artists_data = request.session.get("top_artists_long")["items"][:20]
+    track_data = request.session.get("top_tracks_long")["items"][:20]
     recent_tracks = request.session.get("recent_tracks")["items"]
 
     # need to send all data here
@@ -312,8 +312,20 @@ def get_track(request, id):
             },
         ).text
     )
+    track_analysis = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/audio-analysis/{id}",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )
 
-    if "error" in track_data or "error" in track_features:
+    # No genre key in the artists key in the track_data hence can't call
+    # the recommendations API
+
+    if "error" in track_data or "error" in track_analysis:
         request.session.flush()
         return redirect("login")
 
@@ -323,6 +335,7 @@ def get_track(request, id):
         context={
             "track_data": track_data,
             "track_features": track_features,
+            "track_analysis": track_analysis,
         },
     )
 

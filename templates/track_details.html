@@ -3,25 +3,114 @@
 {% block content %}
 {% load custom_filters %}
 
-<div class="flex h-auto w-screen">
-    <main class="w-full h-full pb-24 md:pb-0 md:pl-24 flex-1 bg-neutral-900 text-white flex justify-center">
-        <header>
-            <a href="{{request.META.HTTP_REFERER}}">Go back</a>
-        </header>
-        <div>
-            <h1>Track data</h1>
-            <p>image: {{track_data.album.images.0.url}}</p>
-            <p>album name: {{track_data.album.name}}</p>
-            <p>track name: {{track_data.name}}</p>
-            <p>artist: {{track_data.artists.0.name}}</p>
-            {% if 'images' in track_data.artists.0 %}
-            <p>artist image: {{track_data.artists.0.images}}</p>
-            {% endif %}
-            <p>duration: {{track_data.duration_ms|ms_to_m_s}}</p>
-            <p>popularity: {{track_data.popularity}}</p>
-            <p>preview url: {{track_data.preview_url}}</p>
-        </div>
-        <!-- <div>{{track_features}}</div> -->
+<div class="flex h-auto w-screen bg-neutral-900 text-white ">
+    <main class="w-screen h-full md:h-screen pb-14  md:pb-0 md:px-6 md:max-w-5xl mx-auto pt-10 flex flex-row">
+        <a href="{{request.META.HTTP_REFERER}}" class="hidden md:block">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </a>
+        <section class="flex flex-col justify-start items-start md:ml-4 w-screen">
+            <header class="flex flex-row justify-start items-center pl-4 md:pl-0">
+                <a href="{{request.META.HTTP_REFERER}}" class="block pr-2 md:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </a>
+                <h1 class="font-semibold text-xl">Track Details</h1>
+            </header>
+            <section class="flex flex-col mt-10 w-full px-4">
+                <div class="flex flex-col items-center md:flex-row md:items-start">
+                    <img src="{{track_data.album.images.0.url}}" alt="track image" class="h-64 w-64">
+                    <div class="flex flex-col items-center mt-4 md:mt-0 md:items-start md:ml-8"
+                        x-data="{playPreview: false}">
+                        <h1 class="text-white text-4xl font-semibold">{{track_data.name}}</h1>
+                        <h3 class="mt-2 font-sans text-neutral-400 text-xl font-semibold">
+                            {{track_data.artists|get_track_all_artists}}
+                        </h3>
+                        <div class="mt-2 flex flex-row items-center gap-2">
+                            <p class="text-sm text-neutral-400 font-normal">{{track_data.album.name}}</p>
+                            <div class="bg-neutral-400 w-1 h-1 rounded-full"></div>
+                            <p class="text-sm text-neutral-400 font-normal">
+                                {{track_data.album.release_date|album_release_year}}
+                            </p>
+                            <!-- <p>preview url: {{track_data.preview_url}}</p> -->
+                        </div>
+                        <div class="mt-8 flex flex-row gap-4">
+                            <button @click="playPreview = !playPreview"
+                                class="py-2 px-6 bg-green-500 rounded-full text-sm font-semibold md:bg-green-600 md:hover:bg-green-500">PREVIEW</button>
+                            <a href="{{track_data.external_urls.spotify}}" target="_blank"
+                                class="py-2 px-6 bg-green-500 rounded-full text-sm font-normal md:bg-green-600 md:hover:bg-green-500">PLAY
+                                ON SPOTIFY</a>
+                        </div>
+                        <div class="mt-2" x-show="playPreview === true">
+                            <audio controls src="{{track_data.preview_url}}"></audio>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-24 w-full h-full">
+                    <div
+                        class="grid grid-cols-2 md:grid-cols-5 items-center-justify-center border border-neutral-400/30">
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{track_data.duration_ms|ms_to_m_s}}
+                            <span class="text-base font-light">Duration</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{track_data.popularity}}%
+                            <span class="text-base font-light">Popularity</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{ track_analysis.track.tempo|float_to_int}}
+                            <span class="text-base font-light">Tempo (BPM)</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{track_analysis.track.loudness}}
+                            <span class="text-base font-light">Loudness (dB)</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {% if track_features.mode == 1 %}
+                            Major
+                            {% else %}
+                            Minor
+                            {% endif %}
+                            <span class="text-base font-light">Modality</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{track_features.time_signature}}
+                            <span class="text-base font-light">Time Signature</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{track_analysis.bars|length}}
+                            <span class="text-base font-light">Bars</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{track_analysis.beats|length}}
+                            <span class="text-base font-light">Beats</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{track_analysis.sections|length}}
+                            <span class="text-base font-light">Sections</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
+                            {{track_analysis.segments|length}}
+                            <span class="text-base font-light">Segments</span>
+                        </h3>
+                    </div>
+                </div>
+            </section>
+        </section>
     </main>
 </div>
 

@@ -56,3 +56,17 @@ def get_album_release_date(value):
 @register.filter(name="strip_white_spaces")
 def strip_white_spaces(value):
     return value.strip()
+
+
+@register.filter(name="get_track_all_artists")
+def get_track_all_artists(artist_list):
+    return ", ".join([artists["name"] for artists in artist_list])
+
+
+@register.filter(name="album_release_year")
+def album_release_year(value):
+    return value.split("-")[0]
+
+@register.filter(name="float_to_int")
+def float_to_int(value):
+    return int(value)
