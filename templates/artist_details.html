@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load custom_filters %}
+
+<div class="flex h-screen w-screen bg-neutral-900 text-white ">
+    <main class="w-screen h-full md:h-screen pb-14  md:pb-0 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
+        <a href="{{request.META.HTTP_REFERER}}" class="h-fit hidden md:block">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </a>
+        <section class="flex flex-col justify-start items-start md:ml-4 w-screen">
+            <header class="flex flex-row justify-start items-center pl-4 md:pl-0">
+                <a href="{{request.META.HTTP_REFERER}}" class="block pr-2 md:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </a>
+                <h1 class="font-semibold text-xl">Artist Details</h1>
+            </header>
+            <section class="flex flex-col mt-10 w-full px-4">
+                <div class="flex flex-col items-center justify-center">
+                    <img src="{{artist.images.0.url}}" alt="artist image" class="h-48 w-48 rounded-full">
+                    <h1 class="mt-4 text-white text-4xl font-semibold">{{artist.name}}</h1>
+                    <h3 class="text-neutral-400">{{artist.genres|formatted_artist_genres}}</h3>
+                    <div class="flex flex-row gap-8">
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4">
+                            {{artist.followers.total|formatted_followers}}
+                            <span class="text-base font-light">Followers</span>
+                        </h3>
+                        <h3
+                            class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4">
+                            {{artist.popularity}}%
+                            <span class="text-base font-light">Popularity</span>
+                        </h3>
+                    </div>
+                    <a href="{{artist.external_urls.spotify}}" target="_blank"
+                        class="py-2 mt-8 w-fit px-6 bg-green-500 rounded-full text-sm font-normal md:bg-green-600 md:hover:bg-green-500">VIEW
+                        ON SPOTIFY</a>
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+{% endblock content %}

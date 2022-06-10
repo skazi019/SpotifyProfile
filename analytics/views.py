@@ -340,6 +340,35 @@ def get_track(request, id):
     )
 
 
+def get_artist(request, id):
+    access_token = request.session.get("access_token")
+    artist = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/artists/{id}",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )
+
+    # No genre key in the artists key in the track_data hence can't call
+    # the recommendations API
+
+    if "error" in artist:
+        request.session.flush()
+        return redirect("login")
+
+    return render(
+        request=request,
+        template_name="artist_details.html",
+        context={
+            "artist": artist,
+        },
+    )
+    pass
+
+
 # Renders album page
 def get_album(request, id):
     if not request.session.exists(request.session.access_token):

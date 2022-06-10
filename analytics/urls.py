@@ -2,6 +2,7 @@ from django.urls import path
 from .views import (
     get_album,
     get_track,
+    get_artist,
     login,
     spotify_callback,
     user_profile,
@@ -20,5 +21,6 @@ urlpatterns = [
     path("recent_tracks/", recent_tracks_page, name="recent_tracks"),
     path("get_album/<str:id>/", get_album, name="get_album"),
     path("get_track/<str:id>/", get_track, name="get_track"),
+    path("get_artist/<str:id>/", get_artist, name="get_artist"),
     path("logout/", logout, name="logout"),
 ]

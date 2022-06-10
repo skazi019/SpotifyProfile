@@ -67,6 +67,17 @@ def get_track_all_artists(artist_list):
 def album_release_year(value):
     return value.split("-")[0]
 
+
 @register.filter(name="float_to_int")
 def float_to_int(value):
     return int(value)
+
+
+@register.filter(name="formatted_followers")
+def formatted_followers(value):
+    return f"{value:,}"
+
+
+@register.filter(name="formatted_artist_genres")
+def formatted_artist_genres(value_list):
+    return ", ".join([value.capitalize() for value in value_list])

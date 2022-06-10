@@ -4,8 +4,8 @@
 {% load custom_filters %}
 
 <div class="flex h-auto w-screen bg-neutral-900 text-white ">
-    <main class="w-screen h-full md:h-screen pb-14  md:pb-0 md:px-6 md:max-w-5xl mx-auto pt-10 flex flex-row">
-        <a href="{{request.META.HTTP_REFERER}}" class="hidden md:block">
+    <main class="w-screen h-full md:h-screen pb-14  md:pb-0 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
+        <a href="{{request.META.HTTP_REFERER}}" class="h-fit hidden md:block">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
                 <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
@@ -52,7 +52,7 @@
                 </div>
                 <div class="mt-24 w-full h-full">
                     <div
-                        class="grid grid-cols-2 md:grid-cols-5 items-center-justify-center border border-neutral-400/30">
+                        class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 items-center-justify-center border border-neutral-400/30">
                         <h3
                             class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4 border border-neutral-400/30">
                             {{track_data.duration_ms|ms_to_m_s}}

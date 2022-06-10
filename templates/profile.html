@@ -1,7 +1,7 @@
 {% load custom_filters %}
 
 <!-- Content section (Copy this for all pages) -->
-<main class="font-sans mt-8 md:mt-20 mb-4 md:mb-20 w-full md:max-w-5xl md:mx-auto px-6" x-show="openTab === 'profile'">
+<main class="font-sans mt-8 md:mt-20 mb-4 md:mb-20 w-full md:max-w-5xl md:mx-auto px-10" x-show="openTab === 'profile'">
 
     <!-- Header section -->
     <div class="flex flex-col justify-center items-center">
@@ -41,19 +41,21 @@
             <!-- Heading -->
             <div class="flex flex-row justify-between items-center">
                 <h1 class="font-bold text-md md:text-xl">Top Artists of All Time</h1>
-                <button
+                <a href="{% url 'top_artists' %}"
                     class="py-2 px-4 border border-gray-200 text-sm rounded-full font-normal tracking-wider hover:bg-gray-200 hover:text-black transition duration-300 ease-in-out">SEE
-                    MORE</button>
+                    MORE</a>
             </div>
 
             <!-- artists -->
             <div class="flex flex-col gap-10">
                 {% for artist in artists_data %}
-                <div class="flex flex-row items-center gap-4">
-                    <img src="{{artist.images.0.url}}" alt="artist image"
-                        class="h-12 w-12 md:h-14 md:w-14 rounded-full">
-                    <h1 class="font-light">{{artist.name}}</h1>
-                </div>
+                <a href="{% url 'get_artist' artist.id %}">
+                    <div class="flex flex-row items-center gap-4">
+                        <img src="{{artist.images.0.url}}" alt="artist image"
+                            class="h-12 w-12 md:h-14 md:w-14 rounded-full">
+                        <h1 class="font-light">{{artist.name}}</h1>
+                    </div>
+                </a>
                 {% endfor %}
             </div>
         </div>
@@ -64,9 +66,9 @@
             <!-- Heading -->
             <div class="flex flex-row justify-between items-center">
                 <h1 class="font-bold text-md md:text-xl">Top Tracks of All Time</h1>
-                <button
+                <a href="{% url 'top_tracks' %}"
                     class="py-2 px-4 border border-gray-200 text-sm rounded-full font-normal tracking-wider hover:bg-gray-200 hover:text-black transition duration-300 ease-in-out">SEE
-                    MORE</button>
+                    MORE</a>
             </div>
 
             <!-- Tracks -->
@@ -77,7 +79,7 @@
                         <div class="flex flex-row items-center gap-4">
                             <img src="{{track.album.images.0.url}}" alt="artist image"
                                 class="h-12 w-12 md:h-14 md:w-14">
-                            <div class="flex flex-col items-start justify-center mr-6 truncate overflow-hidden">
+                            <div class="flex flex-col items-start justify-center truncate overflow-hidden">
                                 <h1 class="font-light">{{track.name}}</h1>
                                 <div class="flex flex-row justify-between items-center gap-2">
                                     <p class="text-xs text-gray-400 font-light text-ellipsis overflow-hidden">
