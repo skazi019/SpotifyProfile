@@ -19,12 +19,11 @@ def human_format(num):
 
 @register.filter(name="ms_to_m_s")
 def ms_to_m_s(value):
-    # if len(value) < 1:
-    # 	return value
-    # print(f"Type of value {value} in Custom Filter is: {type(value)}")
-    sec = value / 1000
-    minutes = int((sec / 60))
-    return "{0}:{1}".format(minutes, str(sec)[:2])
+    seconds = int((value / 1000) % 60)
+    if seconds < 10:
+        seconds = "0" + str(seconds)
+    minutes = int((value / (1000 * 60)) % 60)
+    return "{0}:{1}".format(str(minutes), seconds)
 
 
 @register.filter(name="follower_readable")
@@ -81,3 +80,9 @@ def formatted_followers(value):
 @register.filter(name="formatted_artist_genres")
 def formatted_artist_genres(value_list):
     return ", ".join([value.capitalize() for value in value_list])
+
+
+@register.filter(name="verbose_date")
+def verbose_date(value):
+    datetime_object = datetime.datetime.strptime(value, "%Y-%m-%d").strftime("%d %B %Y")
+    return datetime_object

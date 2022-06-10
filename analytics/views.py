@@ -366,29 +366,49 @@ def get_artist(request, id):
             "artist": artist,
         },
     )
-    pass
 
 
 # Renders album page
 def get_album(request, id):
-    if not request.session.exists(request.session.access_token):
+    access_token = request.session.get("access_token")
+    album = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/albums/{id}",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )
+
+    if "error" in album:
         request.session.flush()
         return redirect("login")
-    else:
-        access_token = request.session.get("access_token")
 
-    try:
-        albumData = json.loads(
+    # change the offset and limit - https://api.spotify.com/v1/albums/2ODvWsOgouMbaA5xf0RkJe/tracks?offset=0&limit=50
+    next_track_page = album["tracks"]["next"]
+    all_tracks = album["tracks"]["items"]
+
+    while next_track_page is not None:
+        next_tracks = json.loads(
             requests.get(
-                f"https://api.spotify.com/v1/albums/{id}",
+                next_track_page,
                 headers={
                     "Content-Type": "application/json",
                     "Authorization": f"Bearer {access_token}",
                 },
             ).text
         )
-    except Exception as e:
-        request.session.flush()
-        return redirect("login")
 
-    return render(request, "album.html", {"albumData": albumData})
+        all_tracks += next_tracks["items"]
+        next_track_page = next_tracks["next"]
+
+    return render(
+        request=request,
+        template_name="album_details.html",
+        context={
+            "album": album,
+            "total_tracks": len(all_tracks),
+            "all_tracks": all_tracks,
+        },
+    )

@@ -36,8 +36,9 @@
                             <p class="text-sm text-neutral-400 font-normal">
                                 {{track_data.album.release_date|album_release_year}}
                             </p>
-                            <!-- <p>preview url: {{track_data.preview_url}}</p> -->
                         </div>
+                        <a href="{% url 'get_album' track_data.album.id %}"
+                            class="text-sm underline underline-offset-2">View Album</a>
                         <div class="mt-8 flex flex-row gap-4">
                             <button @click="playPreview = !playPreview"
                                 class="py-2 px-6 bg-green-500 rounded-full text-sm font-semibold md:bg-green-600 md:hover:bg-green-500">PREVIEW</button>

@@ -26,7 +26,7 @@
                     <img src="{{artist.images.0.url}}" alt="artist image" class="h-48 w-48 rounded-full">
                     <h1 class="mt-4 text-white text-4xl font-semibold">{{artist.name}}</h1>
                     <h3 class="text-neutral-400">{{artist.genres|formatted_artist_genres}}</h3>
-                    <div class="flex flex-row gap-8">
+                    <div class="flex flex-row justify-center items-center gap-8">
                         <h3
                             class="text-2xl text-neutral-400 font-semibold flex flex-col justify-center items-center py-4">
                             {{artist.followers.total|formatted_followers}}
