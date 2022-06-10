@@ -21,7 +21,7 @@
                 </a>
                 <h1 class="font-semibold text-xl">Artist Details</h1>
             </header>
-            <section class="flex flex-col mt-10 w-full px-4">
+            <section class="flex flex-col mt-10 w-full px-10">
                 <div class="flex flex-col items-center justify-center">
                     <img src="{{artist.images.0.url}}" alt="artist image" class="h-48 w-48 rounded-full">
                     <h1 class="mt-4 text-white text-4xl font-semibold">{{artist.name}}</h1>
@@ -43,15 +43,15 @@
                         ON SPOTIFY</a>
                 </div>
             </section>
-            <section class="mt-10 text-white">
+            <section class="mt-10 px-10 text-white mx-auto">
                 <h1 class="font-semibold text-xl">Similar Artists You'll Like</h1>
-                <div class="mt-4 md:mt-10 w-full flex flex-row flex-wrap gap-8">
+                <div class="mt-4 md:mt-10 w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {% for artist in related_artists %}
                     <a href="{% url 'get_artist' artist.id %}"
                         class="flex flex-col justify-center items-center grow md:hover:bg-gray-500/30 md:rounded-md md:py-4">
                         <img src="{{artist.images.0.url}}" alt="artist image"
                             class="h-24 w-24 md:h-40 md:w-40 rounded-full">
-                        <span class="mt-2 font-light text-gray-300">{{artist.name}}</span>
+                        <span class="mt-2 font-light text-gray-300 break-all">{{artist.name}}</span>
                     </a>
                     {% endfor %}
                 </div>
