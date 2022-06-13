@@ -49,7 +49,6 @@ def spotify_callback(request):
         "https://accounts.spotify.com/api/token",
         headers={
             "User-Agent": request.META["HTTP_USER_AGENT"],
-            "content-type": "application/json",
         },
         data={
             "grant_type": "authorization_code",
