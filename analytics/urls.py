@@ -11,6 +11,7 @@ from .views import (
     top_artists_page,
     recent_tracks_page,
     user_followed_artists,
+    all_playlists,
 )
 
 urlpatterns = [
@@ -24,5 +25,6 @@ urlpatterns = [
     path("get_track/<str:id>/", get_track, name="get_track"),
     path("get_artist/<str:id>/", get_artist, name="get_artist"),
     path("followed_artists/", user_followed_artists, name="followed_artists"),
+    path("all_playlists/", all_playlists, name="all_playlists"),
     path("logout/", logout, name="logout"),
 ]

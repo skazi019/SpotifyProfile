@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load custom_filters %}
+
+<div class="flex h-auto w-screen bg-neutral-900 text-white ">
+    {% include 'navbar.html' %}
+    <main class="w-screen h-auto pb-28  md:pb-28 md:pl-24 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
+        <a href="{{request.META.HTTP_REFERER}}" class="h-fit hidden md:block">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </a>
+        <section class="flex flex-col justify-start items-start md:ml-4 w-screen">
+            <header class="flex flex-row justify-start items-center pl-4 md:pl-0">
+                <a href="{{request.META.HTTP_REFERER}}" class="block pr-2 md:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </a>
+                <h1 class="font-semibold text-xl">Playlists</h1>
+            </header>
+            <section class="text-white mx-auto px-10 md:px-0">
+                <div class="mt-5 md:mt-5 w-full grid grid-cols-2 lg:grid-cols-3 items-start gap-2 md:gap-10">
+                    {% for playlist in all_playlists %}
+                    <a href="#"
+                        class="flex flex-col justify-center items-center grow md:hover:bg-gray-500/30 md:rounded-md md:py-5 px-2">
+                        <img src="{{playlist.images.0.url}}" alt="cover image"
+                            class="h-32 w-32 md:h-56 md:w-56 object-cover ">
+                        <span
+                            class="mt-2 font-light text-gray-300 text-xs md:text-sm break-words">{{playlist.name}}</span>
+                        <span
+                            class="font-light text-gray-300 text-xs md:text-sm break-words">{{playlist.owner.display_name}}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </section>
+        </section>
+    </main>
+</div>
+{% endblock content %}

@@ -83,6 +83,16 @@ def spotify_callback(request):
     else:
         request.session["followed_artists"] = followed_artists[0]["all_artists"]
 
+    users_playlists = get_users_playlists(
+        access_token=access_token, user_id=request.session.get("user_data")["id"]
+    )
+    if users_playlists == "error":
+        print(f"Error in getting followed artists")
+        request.session.flush()
+        return redirect("login")
+    else:
+        request.session["playlists"] = users_playlists
+
     request.session["recent_tracks"] = json.loads(
         requests.get(
             f"https://api.spotify.com/v1/me/player/recently-played?limit=50",
@@ -223,6 +233,43 @@ def get_followed_artists(access_token):
     )
 
 
+# Utility function to get user's playlists
+def get_users_playlists(access_token, user_id):
+    playlists = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/users/{user_id}/playlists",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )
+
+    if "error" in playlists:
+        return "error"
+
+    next_playlist_page = playlists["next"]
+    all_playlists = playlists["items"]
+
+    while next_playlist_page is not None:
+        next_artists = json.loads(
+            requests.get(
+                next_playlist_page,
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {access_token}",
+                },
+            ).text
+        )
+
+        all_playlists += next_artists["items"]
+        next_playlist_page = next_artists["next"]
+
+    print(f"All Playlists: {len(all_playlists)}")
+
+    return all_playlists
+
+
 # Renders home page
 def user_profile(request):
     if not request.session.exists(request.session.session_key):
@@ -246,6 +293,7 @@ def user_profile(request):
     track_data = request.session.get("top_tracks_long")["items"][:20]
     recent_tracks = request.session.get("recent_tracks")["items"]
     followed_artists = request.session.get("followed_artists")
+    playlists = request.session.get("playlists")
 
     # need to send all data here
 
@@ -258,6 +306,7 @@ def user_profile(request):
             "track_data": track_data,
             "recent_tracks": recent_tracks,
             "followed_artists": followed_artists,
+            "playlists": playlists,
         },
     )
 
@@ -490,5 +539,20 @@ def get_album(request, id):
             "album": album,
             "total_tracks": len(all_tracks),
             "all_tracks": all_tracks,
+        },
+    )
+
+
+# Renders playlists page
+def all_playlists(request):
+    if not request.session.exists(request.session.session_key):
+        return redirect("login")
+
+    all_playlists = request.session.get("playlists")
+    return render(
+        request=request,
+        template_name="playlists_page.html",
+        context={
+            "all_playlists": all_playlists,
         },
     )

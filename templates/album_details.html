@@ -6,7 +6,7 @@
 <div class="flex h-auto w-screen bg-neutral-900 text-white ">
     {% include 'navbar.html' %}
     <main
-        class="w-screen h-full {% if all_tracks|length < 10 %} md:h-screen {% else %} md:h-full {% endif %} pb-28  md:pb-28 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
+        class="w-screen h-full {% if all_tracks|length < 3 %} md:h-screen {% else %} md:h-full {% endif %} pb-28  md:pb-28 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
         <!-- Back Button Desktop -->
         <a href="{% url 'user_profile' %}" class="h-fit hidden md:block">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"

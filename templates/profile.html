@@ -23,13 +23,20 @@
             <!-- Followers -->
             <div class="flex flex-col justify-center items-center">
                 <h1 class="text-lg font-semibold text-green-500">{{user_data.followers.total}}</h1>
-                <span class="text-xs font-light text-gray-400">FOLLOWERS</span>
+                <span
+                    class="text-xs font-light text-gray-400">FOLLOWER{{user_data.followers.total|pluralize|upper}}</span>
             </div>
 
             <!-- Followed -->
             <a href="{% url 'followed_artists' %}" class="flex flex-col justify-center items-center">
                 <h1 class="text-lg font-semibold text-green-500">{{followed_artists|length}}</h1>
                 <span class="text-xs font-light text-gray-400">FOLLOWING</span>
+            </a>
+
+            <!-- Playlists -->
+            <a href="{% url 'all_playlists' %}" class="flex flex-col justify-center items-center">
+                <h1 class="text-lg font-semibold text-green-500">{{playlists|length}}</h1>
+                <span class="text-xs font-light text-gray-400">PLAYLIST{{playlists|length|pluralize|upper}}</span>
             </a>
         </div>
 
