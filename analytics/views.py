@@ -21,6 +21,9 @@ def login(request):
         requests.Request(
             "GET",
             "https://accounts.spotify.com/authorize",
+            headers={
+                "User-Agent": request.META["HTTP_USER_AGENT"],
+            },
             params={
                 "client_id": os.environ.get("CLIENT_ID"),
                 "response_type": os.environ.get("RESPONSE_TYPE"),
