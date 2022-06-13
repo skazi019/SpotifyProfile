@@ -23,6 +23,7 @@ def login(request):
             "https://accounts.spotify.com/authorize",
             headers={
                 "User-Agent": request.META["HTTP_USER_AGENT"],
+                "content-type": "application/json",
             },
             params={
                 "client_id": os.environ.get("CLIENT_ID"),
@@ -48,6 +49,7 @@ def spotify_callback(request):
         "https://accounts.spotify.com/api/token",
         headers={
             "User-Agent": request.META["HTTP_USER_AGENT"],
+            "content-type": "application/json",
         },
         data={
             "grant_type": "authorization_code",
