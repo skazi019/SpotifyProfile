@@ -7,7 +7,7 @@
     <div class="flex flex-col justify-center items-center">
 
         <!-- Profile image -->
-        <img src="{{user_data.images.0.url}}" alt="profile image" class="rounded-full h-36 w-36">
+        <img src="{{user_data.images.0.url}}" alt="profile image" class="rounded-full h-36 w-36 object-cover">
 
         <!-- User display name -->
         <a href="{{user_data.external_urls.spotify}}" class="mt-8">
@@ -65,7 +65,7 @@
                 <a href="{% url 'get_artist' artist.id %}">
                     <div class="flex flex-row items-center gap-4">
                         <img src="{{artist.images.0.url}}" alt="artist image"
-                            class="h-12 w-12 md:h-14 md:w-14 rounded-full">
+                            class="h-12 w-12 md:h-14 md:w-14 rounded-full object-cover">
                         <h1 class="font-light">{{artist.name}}</h1>
                     </div>
                 </a>
@@ -91,7 +91,7 @@
                     <div class="flex flex-row justify-between items-center">
                         <div class="flex flex-row items-center gap-4">
                             <img src="{{track.album.images.0.url}}" alt="artist image"
-                                class="h-12 w-12 md:h-14 md:w-14">
+                                class="h-12 w-12 md:h-14 md:w-14 object-cover">
                             <div class="flex flex-col items-start justify-center truncate overflow-hidden">
                                 <h1 class="font-light">{{track.name}}</h1>
                                 <div class="flex flex-row justify-between items-center gap-2">

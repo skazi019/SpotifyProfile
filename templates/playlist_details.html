@@ -30,7 +30,7 @@
             <!-- Album Details -->
             <section class="flex flex-col mt-10 w-full">
                 <div class="flex flex-col items-center md:flex-row md:items-start">
-                    <img src="{{playlist.images.0.url}}" alt="track image" class="h-64 w-64">
+                    <img src="{{playlist.images.0.url}}" alt="track image" class="h-64 w-64 object-cover">
                     <div class="flex flex-col items-center mt-4 md:mt-0 md:items-start md:ml-8 break-words"
                         x-data="{playPreview: false}">
                         <h1 class="text-white text-4xl font-semibold break-words">{{playlist.name}}</h1>
@@ -73,7 +73,7 @@
                     <div class="flex flex-row justify-between items-center hover:bg-gray-500/30 rounded-md p-2">
                         <div class="flex flex-row items-center gap-4">
                             <img src="{{track.track.album.images.0.url}}" alt="artist image"
-                                class="h-12 w-12 md:h-14 md:w-14">
+                                class="h-12 w-12 md:h-14 md:w-14 object-cover">
                             <div class="flex flex-col items-start justify-center">
                                 <h1 class="font-light">{{track.track.name}}</h1>
                                 <div class="flex flex-row justify-between items-center gap-2">

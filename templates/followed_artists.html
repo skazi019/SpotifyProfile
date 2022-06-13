@@ -28,7 +28,7 @@
                     <a href="{% url 'get_artist' artist.id %}"
                         class="flex flex-col justify-center items-center grow lg:px-4 md:hover:bg-gray-500/30 md:rounded-md md:py-4">
                         <img src="{{artist.images.0.url}}" alt="artist image"
-                            class="h-32 w-32 md:h-56 md:w-56 rounded-full">
+                            class="h-32 w-32 md:h-56 md:w-56 rounded-full object-cover">
                         <span class="mt-2 font-light text-gray-300 break-normal">{{artist.name}}</span>
                     </a>
                     {% endfor %}

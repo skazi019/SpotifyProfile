@@ -24,7 +24,7 @@
             </header>
             <section class="flex flex-col mt-10 w-full px-10">
                 <div class="flex flex-col items-center justify-center">
-                    <img src="{{artist.images.0.url}}" alt="artist image" class="h-48 w-48 rounded-full">
+                    <img src="{{artist.images.0.url}}" alt="artist image" class="h-48 w-48 rounded-full object-cover">
                     <h1 class="mt-4 text-white text-4xl font-semibold">{{artist.name}}</h1>
                     <h3 class="text-neutral-400">{{artist.genres|formatted_artist_genres}}</h3>
                     <div class="flex flex-row justify-center items-center gap-8">
@@ -51,7 +51,7 @@
                     <a href="{% url 'get_artist' artist.id %}"
                         class="flex flex-col justify-center items-center grow lg:px-4 md:hover:bg-gray-500/30 md:rounded-md md:py-4">
                         <img src="{{artist.images.0.url}}" alt="artist image"
-                            class="h-24 w-24 md:h-40 md:w-40 rounded-full">
+                            class="h-24 w-24 md:h-40 md:w-40 rounded-full object-cover">
                         <span class="mt-2 font-light text-gray-300 break-normal">{{artist.name}}</span>
                     </a>
                     {% endfor %}
