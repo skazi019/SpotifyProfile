@@ -77,7 +77,6 @@ def spotify_callback(request):
 
     followed_artists = get_followed_artists(access_token=access_token)
     if followed_artists == "error":
-        print(f"Error in getting followed artists")
         request.session.flush()
         return redirect("login")
     else:
@@ -87,7 +86,6 @@ def spotify_callback(request):
         access_token=access_token, user_id=request.session.get("user_data")["id"]
     )
     if users_playlists == "error":
-        print(f"Error in getting followed artists")
         request.session.flush()
         return redirect("login")
     else:
@@ -223,8 +221,6 @@ def get_followed_artists(access_token):
         all_artists += next_artists["artists"]["items"]
         next_artists_page = next_artists["artists"]["next"]
 
-    print(f"All Artists: {len(all_artists)}")
-
     return (
         {
             "total_artists": len(all_artists),
@@ -265,8 +261,6 @@ def get_users_playlists(access_token, user_id):
         all_playlists += next_artists["items"]
         next_playlist_page = next_artists["next"]
 
-    print(f"All Playlists: {len(all_playlists)}")
-
     return all_playlists
 
 
@@ -281,7 +275,6 @@ def user_profile(request):
             and request.session.get("top_artists_short")
             and request.session.get("top_tracks_short")
         ):
-            print("Data not found in request")
             request.session.flush()
             return redirect("login")
     except Exception as e:
@@ -318,7 +311,6 @@ def top_tracks_page(request):
 
     try:
         if not (request.session.get("top_artists_short")):
-            print("Data not found in request")
             request.session.flush()
             return redirect("login")
     except Exception as e:
@@ -375,7 +367,6 @@ def recent_tracks_page(request):
 
     try:
         if not (request.session.get("top_artists_short")):
-            print("Data not found in request")
             request.session.flush()
             return redirect("login")
     except Exception as e:
@@ -554,5 +545,50 @@ def all_playlists(request):
         template_name="playlists_page.html",
         context={
             "all_playlists": all_playlists,
+        },
+    )
+
+
+# Render individual playlist page
+def get_playlist(request, id):
+    access_token = request.session.get("access_token")
+    playlist = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/playlists/{id}",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )
+
+    if "error" in playlist:
+        request.session.flush()
+        return redirect("login")
+
+    # change the offset and limit - https://api.spotify.com/v1/albums/2ODvWsOgouMbaA5xf0RkJe/tracks?offset=0&limit=50
+    next_track_page = playlist["tracks"]["next"]
+    all_tracks = playlist["tracks"]["items"]
+
+    while next_track_page is not None:
+        next_tracks = json.loads(
+            requests.get(
+                next_track_page,
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {access_token}",
+                },
+            ).text
+        )
+
+        all_tracks += next_tracks["items"]
+        next_track_page = next_tracks["next"]
+
+    return render(
+        request=request,
+        template_name="playlist_details.html",
+        context={
+            "playlist": playlist,
+            "all_tracks": all_tracks,
         },
     )

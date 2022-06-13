@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load custom_filters %}
+
+<div class="flex h-auto w-screen bg-neutral-900 text-white ">
+    {% include 'navbar.html' %}
+    <main
+        class="w-screen h-full {% if all_tracks|length < 3 %} md:h-screen {% else %} md:h-full {% endif %} pb-28  md:pb-28 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
+        <!-- Back Button Desktop -->
+        <a href="{% url 'user_profile' %}" class="h-fit hidden md:block">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor" stroke-width="2">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+        </a>
+        <section class="flex flex-col justify-start items-start md:ml-4 w-screen px-8 md:px-0">
+
+            <!-- Back Button Mobile -->
+            <header class="flex flex-row justify-start items-center">
+                <a href="{% url 'user_profile' %}" class="block pr-2 md:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                </a>
+                <h1 class="font-semibold text-xl">Playlist Details</h1>
+            </header>
+
+            <!-- Album Details -->
+            <section class="flex flex-col mt-10 w-full">
+                <div class="flex flex-col items-center md:flex-row md:items-start">
+                    <img src="{{playlist.images.0.url}}" alt="track image" class="h-64 w-64">
+                    <div class="flex flex-col items-center mt-4 md:mt-0 md:items-start md:ml-8 break-words"
+                        x-data="{playPreview: false}">
+                        <h1 class="text-white text-4xl font-semibold break-words">{{playlist.name}}</h1>
+                        <h3 class="mt-2 font-sans text-neutral-400 text-xl font-semibold break-words">
+                            {{playlist.description}}
+                        </h3>
+                        <p
+                            class="mt-2 text-sm text-white underline underline-offset-2 font-normal md:text-neutral-400 md:hover:text-white md:hover:underline md:hover:underline-offset-2">
+                            <a href="{{playlist.owner.external_urls.spotify}}">{{playlist.owner.display_name}}</a>
+                        </p>
+                        <div class="flex flex-row gap-4">
+                            <p class="mt-2 text-sm text-neutral-400 font-normal">
+                                Number of Tracks: {{all_tracks|length|formatted_followers}}
+                            </p>
+                            <p class="mt-2 text-sm text-neutral-400 font-normal">
+                                Followers: {{playlist.followers.total|formatted_followers}}
+                            </p>
+                        </div>
+                        <a href="{{playlist.external_urls.spotify}}" target="_blank"
+                            class="mt-8 py-2 px-6 bg-green-500 rounded-full text-sm font-normal md:bg-green-600 md:hover:bg-green-500">VIEW
+                            ON SPOTIFY</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- All Tracks Section -->
+            <section class="mt-14 md:px-8 md:mt-20 w-full flex flex-col gap-4">
+                <div class="flex flex-row justify-between items-center p-2 border-b border-neutral-400/20">
+                    <p class="text-gray-400">Title</p>
+                    <p class="text-gray-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </p>
+                </div>
+                {% for track in all_tracks %}
+                <a href="{% url 'get_track' track.track.id %}">
+                    <div class="flex flex-row justify-between items-center hover:bg-gray-500/30 rounded-md p-2">
+                        <div class="flex flex-row items-center gap-4">
+                            <img src="{{track.track.album.images.0.url}}" alt="artist image"
+                                class="h-12 w-12 md:h-14 md:w-14">
+                            <div class="flex flex-col items-start justify-center">
+                                <h1 class="font-light">{{track.track.name}}</h1>
+                                <div class="flex flex-row justify-between items-center gap-2">
+                                    <p class="text-xs text-gray-400 font-light">
+                                        {{track.track.artists|get_track_all_artists}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Track duration -->
+                        <p class="text-xs text-gray-400">{{track.track.duration_ms|ms_to_m_s}}</p>
+                    </div>
+                </a>
+                {% endfor %}
+            </section>
+        </section>
+    </main>
+</div>
+{% endblock content %}

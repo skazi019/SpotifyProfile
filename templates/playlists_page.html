@@ -18,7 +18,7 @@
             <div class="mt-10 md:mt-20 w-full grid grid-cols-2 lg:grid-cols-3 items-start gap-2 md:gap-10">
                 {% for playlist in all_playlists %}
                 {% if playlist.images.0.url %}
-                <a href="#"
+                <a href="{% url 'get_playlist' playlist.id %}"
                     class="flex flex-col justify-center items-center lg:align-items justify-center grow md:hover:bg-gray-500/30 md:rounded-md md:py-5 px-2">
                     <img src="{{playlist.images.0.url}}" alt="cover image"
                         class="h-32 w-32 md:h-56 md:w-56 object-cover lg:self-center">
