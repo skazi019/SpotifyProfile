@@ -4,7 +4,8 @@
 {% load custom_filters %}
 
 <div class="flex h-auto w-screen bg-neutral-900 text-white ">
-    <main class="w-screen h-full md:h-screen pb-14  md:pb-0 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
+    {% include 'navbar.html' %}
+    <main class="w-screen h-full md:h-screen pb-28  md:pb-28 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
         <a href="{{request.META.HTTP_REFERER}}" class="h-fit hidden md:block">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
@@ -43,7 +44,7 @@
                             <button @click="playPreview = !playPreview"
                                 class="py-2 px-6 bg-green-500 rounded-full text-sm font-semibold md:bg-green-600 md:hover:bg-green-500">PREVIEW</button>
                             <a href="{{track_data.external_urls.spotify}}" target="_blank"
-                                class="py-2 px-6 bg-green-500 rounded-full text-sm font-normal md:bg-green-600 md:hover:bg-green-500">PLAY
+                                class="py-2 px-6 bg-green-700 rounded-full text-sm font-normal md:bg-green-700 md:hover:bg-green-500">PLAY
                                 ON SPOTIFY</a>
                         </div>
                         <div class="mt-2" x-show="playPreview === true">

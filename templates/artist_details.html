@@ -4,7 +4,8 @@
 {% load custom_filters %}
 
 <div class="flex h-auto w-screen bg-neutral-900 text-white ">
-    <main class="w-screen h-auto pb-14  md:pb-28 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
+    {% include 'navbar.html' %}
+    <main class="w-screen h-auto pb-28  md:pb-28 md:px-10 md:max-w-5xl mx-auto pt-10 flex flex-row">
         <a href="{{request.META.HTTP_REFERER}}" class="h-fit hidden md:block">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
                 stroke="currentColor" stroke-width="2">
@@ -48,10 +49,10 @@
                 <div class="mt-4 md:mt-10 w-full grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
                     {% for artist in related_artists %}
                     <a href="{% url 'get_artist' artist.id %}"
-                        class="flex flex-col justify-center items-center grow md:hover:bg-gray-500/30 md:rounded-md md:py-4">
+                        class="flex flex-col justify-center items-center grow lg:px-4 md:hover:bg-gray-500/30 md:rounded-md md:py-4">
                         <img src="{{artist.images.0.url}}" alt="artist image"
                             class="h-24 w-24 md:h-40 md:w-40 rounded-full">
-                        <span class="mt-2 font-light text-gray-300 break-all">{{artist.name}}</span>
+                        <span class="mt-2 font-light text-gray-300 break-normal">{{artist.name}}</span>
                     </a>
                     {% endfor %}
                 </div>

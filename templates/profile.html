@@ -18,13 +18,19 @@
         <h3 class="text-sm text-gray-500 tracking-wider font-light">{{user_data.product|upper}}</h3>
 
         <!-- Profile Metrics -->
-        <div class="flex flex-row items-center mt-6">
+        <div class="flex flex-row items-center gap-4 mt-6">
 
             <!-- Followers -->
             <div class="flex flex-col justify-center items-center">
                 <h1 class="text-lg font-semibold text-green-500">{{user_data.followers.total}}</h1>
                 <span class="text-xs font-light text-gray-400">FOLLOWERS</span>
             </div>
+
+            <!-- Followed -->
+            <a href="{% url 'followed_artists' %}" class="flex flex-col justify-center items-center">
+                <h1 class="text-lg font-semibold text-green-500">{{followed_artists|length}}</h1>
+                <span class="text-xs font-light text-gray-400">FOLLOWING</span>
+            </a>
         </div>
 
         <!-- Logout -->

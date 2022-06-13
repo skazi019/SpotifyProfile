@@ -75,6 +75,14 @@ def spotify_callback(request):
     request.session["top_tracks_medium"] = tracks_data[1]
     request.session["top_tracks_long"] = tracks_data[2]
 
+    followed_artists = get_followed_artists(access_token=access_token)
+    if followed_artists == "error":
+        print(f"Error in getting followed artists")
+        request.session.flush()
+        return redirect("login")
+    else:
+        request.session["followed_artists"] = followed_artists[0]["all_artists"]
+
     request.session["recent_tracks"] = json.loads(
         requests.get(
             f"https://api.spotify.com/v1/me/player/recently-played?limit=50",
@@ -173,6 +181,48 @@ def get_top_tracks(access_token, limit=50):
     return [top_tracks_short, top_tracks_medium, top_tracks_long]
 
 
+# Utility function to get artists followed by current user
+def get_followed_artists(access_token):
+    artists = json.loads(
+        requests.get(
+            f"https://api.spotify.com/v1/me/following?type=artist",
+            headers={
+                "Content-Type": "application/json",
+                "Authorization": f"Bearer {access_token}",
+            },
+        ).text
+    )
+
+    if "error" in artists:
+        return "error"
+
+    next_artists_page = artists["artists"]["next"]
+    all_artists = artists["artists"]["items"]
+
+    while next_artists_page is not None:
+        next_artists = json.loads(
+            requests.get(
+                next_artists_page,
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {access_token}",
+                },
+            ).text
+        )
+
+        all_artists += next_artists["artists"]["items"]
+        next_artists_page = next_artists["artists"]["next"]
+
+    print(f"All Artists: {len(all_artists)}")
+
+    return (
+        {
+            "total_artists": len(all_artists),
+            "all_artists": all_artists,
+        },
+    )
+
+
 # Renders home page
 def user_profile(request):
     if not request.session.exists(request.session.session_key):
@@ -195,6 +245,7 @@ def user_profile(request):
     artists_data = request.session.get("top_artists_long")["items"][:20]
     track_data = request.session.get("top_tracks_long")["items"][:20]
     recent_tracks = request.session.get("recent_tracks")["items"]
+    followed_artists = request.session.get("followed_artists")
 
     # need to send all data here
 
@@ -206,6 +257,7 @@ def user_profile(request):
             "artists_data": artists_data,
             "track_data": track_data,
             "recent_tracks": recent_tracks,
+            "followed_artists": followed_artists,
         },
     )
 
@@ -239,13 +291,13 @@ def top_tracks_page(request):
     )
 
 
+# Renders top artists page
 def top_artists_page(request):
     if not request.session.exists(request.session.session_key):
         return redirect("login")
 
     try:
         if not (request.session.get("top_artists_short")):
-            print("Data not found in request")
             request.session.flush()
             return redirect("login")
     except Exception as e:
@@ -267,6 +319,7 @@ def top_artists_page(request):
     )
 
 
+# Renders recent tracks page
 def recent_tracks_page(request):
     if not request.session.exists(request.session.session_key):
         return redirect("login")
@@ -340,6 +393,7 @@ def get_track(request, id):
     )
 
 
+# Renders artists details page
 def get_artist(request, id):
     access_token = request.session.get("access_token")
     artist = json.loads(
@@ -379,7 +433,22 @@ def get_artist(request, id):
     )
 
 
-# Renders album page
+# Renders user followed artists page
+def user_followed_artists(request):
+    if not request.session.exists(request.session.session_key):
+        return redirect("login")
+
+    followed_artists = request.session.get("followed_artists")
+    return render(
+        request=request,
+        template_name="followed_artists.html",
+        context={
+            "followed_artists": followed_artists,
+        },
+    )
+
+
+# Renders album details page
 def get_album(request, id):
     access_token = request.session.get("access_token")
     album = json.loads(
