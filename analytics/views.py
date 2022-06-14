@@ -10,6 +10,8 @@ from dotenv import load_dotenv, find_dotenv
 
 load_dotenv(find_dotenv())
 
+logger = logging.getLogger(__name__)
+
 
 def login(request):
     if not request.session.exists(request.session.session_key):
@@ -43,8 +45,8 @@ def spotify_callback(request):
     code = request.GET.get("code")
     error = request.GET.get("error")
 
-    logging.warning(f"Callback code: {code}")
-    logging.warning(f"Callback error: {error}")
+    logger.warning(f"Callback code: {code}")
+    logger.warning(f"Callback error: {error}")
 
     if error == "access_denied":
         return render(request, "failed_login.html")
@@ -63,7 +65,7 @@ def spotify_callback(request):
         },
     ).json()
 
-    logging.warning(f"Token URL: {token_url}")
+    logger.warning(f"Token URL: {token_url}")
 
     access_token = token_url["access_token"]
     token_type = token_url["token_type"]
