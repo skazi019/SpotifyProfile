@@ -2,6 +2,7 @@ import datetime
 from re import template
 import requests
 import json
+import logging
 import os
 from django.shortcuts import render, redirect
 
@@ -42,6 +43,9 @@ def spotify_callback(request):
     code = request.GET.get("code")
     error = request.GET.get("error")
 
+    logging.warning(f"Callback code: {code}")
+    logging.warning(f"Callback error: {error}")
+
     if error == "access_denied":
         return render(request, "failed_login.html")
 
@@ -58,6 +62,8 @@ def spotify_callback(request):
             "client_secret": os.environ.get("CLIENT_SECRET"),
         },
     ).json()
+
+    logging.warning(f"Token URL: {token_url}")
 
     access_token = token_url["access_token"]
     token_type = token_url["token_type"]
