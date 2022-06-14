@@ -126,11 +126,13 @@ def logout(request):
 
 # Utility function for user data
 def get_user_profile_data(access_token):
+    logger.warning(f"Access token in fetching profile data: {access_token}")
     userProfile = json.loads(
         requests.get(
             "https://api.spotify.com/v1/me",
             headers={
                 "content-type": "application/json",
+                "Accept": "application/json",
                 "Authorization": "Bearer {0}".format(access_token),
             },
         ).text
