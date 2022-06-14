@@ -139,6 +139,8 @@ def get_user_profile_data(access_token):
             },
         ).text
 
+        logging.error(f"User Profile before JSON decoding: {userProfile}")
+
         userProfile_decoded = json.loads(userProfile)
 
     except Exception as e:
