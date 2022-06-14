@@ -1,6 +1,7 @@
 import datetime
 from re import template
 import traceback
+from platformdirs import user_cache_dir
 import requests
 import json
 import logging
@@ -129,21 +130,23 @@ def logout(request):
 def get_user_profile_data(access_token):
     logger.warning(f"Access token in fetching profile data: {access_token}")
     try:
-        userProfile = json.loads(
-            requests.get(
-                "https://api.spotify.com/v1/me",
-                headers={
-                    "content-type": "application/json",
-                    "Accept": "application/json",
-                    "Authorization": "Bearer {0}".format(access_token),
-                },
-            ).text
-        )
+        userProfile = requests.get(
+            "https://api.spotify.com/v1/me",
+            headers={
+                "content-type": "application/json",
+                "Accept": "application/json",
+                "Authorization": "Bearer {0}".format(access_token),
+            },
+        ).text
+
+        userProfile_decoded = json.loads(userProfile)
+
     except Exception as e:
         logger.error(f"Error in getting user profile data")
+        logger.error(userProfile)
         logger.error(traceback.print_exc())
 
-    return userProfile
+    return userProfile_decoded
 
 
 # Utility function for artist data
