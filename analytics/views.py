@@ -102,7 +102,7 @@ def spotify_callback(request):
         requests.get(
             f"https://api.spotify.com/v1/me/player/recently-played?limit=50",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -118,15 +118,16 @@ def logout(request):
 
 # Utility function for user data
 def get_user_profile_data(access_token):
-    userProfile = requests.get(
-        "https://api.spotify.com/v1/me",
-        headers={
-            "Content-Type": "application/json",
-            "Authorization": "Bearer {0}".format(access_token),
-        },
+    userProfile = json.loads(
+        requests.get(
+            "https://api.spotify.com/v1/me",
+            headers={
+                "content-type": "application/json",
+                "Authorization": "Bearer {0}".format(access_token),
+            },
+        ).text
     )
 
-    userProfile = json.loads(userProfile.text)
     return userProfile
 
 
@@ -136,7 +137,7 @@ def get_top_artists(access_token, limit=50):
         requests.get(
             f"https://api.spotify.com/v1/me/top/artists?time_range=short_term&limit={limit}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -145,7 +146,7 @@ def get_top_artists(access_token, limit=50):
         requests.get(
             f"https://api.spotify.com/v1/me/top/artists?time_range=medium_term&limit={limit}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -154,7 +155,7 @@ def get_top_artists(access_token, limit=50):
         requests.get(
             f"https://api.spotify.com/v1/me/top/artists?time_range=long_term&limit={limit}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -169,7 +170,7 @@ def get_top_tracks(access_token, limit=50):
         requests.get(
             f"https://api.spotify.com/v1/me/top/tracks?time_range=short_term&limit={limit}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -178,7 +179,7 @@ def get_top_tracks(access_token, limit=50):
         requests.get(
             f"https://api.spotify.com/v1/me/top/tracks?time_range=medium_term&limit={limit}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -187,7 +188,7 @@ def get_top_tracks(access_token, limit=50):
         requests.get(
             f"https://api.spotify.com/v1/me/top/tracks?time_range=long_term&limit={limit}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -202,7 +203,7 @@ def get_followed_artists(access_token):
         requests.get(
             f"https://api.spotify.com/v1/me/following?type=artist",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -219,7 +220,7 @@ def get_followed_artists(access_token):
             requests.get(
                 next_artists_page,
                 headers={
-                    "Content-Type": "application/json",
+                    "content-type": "application/json",
                     "Authorization": f"Bearer {access_token}",
                 },
             ).text
@@ -242,7 +243,7 @@ def get_users_playlists(access_token, user_id):
         requests.get(
             f"https://api.spotify.com/v1/users/{user_id}/playlists",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -259,7 +260,7 @@ def get_users_playlists(access_token, user_id):
             requests.get(
                 next_playlist_page,
                 headers={
-                    "Content-Type": "application/json",
+                    "content-type": "application/json",
                     "Authorization": f"Bearer {access_token}",
                 },
             ).text
@@ -398,7 +399,7 @@ def get_track(request, id):
         requests.get(
             f"https://api.spotify.com/v1/tracks/{id}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -407,7 +408,7 @@ def get_track(request, id):
         requests.get(
             f"https://api.spotify.com/v1/audio-features/{id}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -416,7 +417,7 @@ def get_track(request, id):
         requests.get(
             f"https://api.spotify.com/v1/audio-analysis/{id}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -447,7 +448,7 @@ def get_artist(request, id):
         requests.get(
             f"https://api.spotify.com/v1/artists/{id}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -457,7 +458,7 @@ def get_artist(request, id):
         requests.get(
             f"https://api.spotify.com/v1/artists/{id}/related-artists",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -502,7 +503,7 @@ def get_album(request, id):
         requests.get(
             f"https://api.spotify.com/v1/albums/{id}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -521,7 +522,7 @@ def get_album(request, id):
             requests.get(
                 next_track_page,
                 headers={
-                    "Content-Type": "application/json",
+                    "content-type": "application/json",
                     "Authorization": f"Bearer {access_token}",
                 },
             ).text
@@ -563,7 +564,7 @@ def get_playlist(request, id):
         requests.get(
             f"https://api.spotify.com/v1/playlists/{id}",
             headers={
-                "Content-Type": "application/json",
+                "content-type": "application/json",
                 "Authorization": f"Bearer {access_token}",
             },
         ).text
@@ -582,7 +583,7 @@ def get_playlist(request, id):
             requests.get(
                 next_track_page,
                 headers={
-                    "Content-Type": "application/json",
+                    "content-type": "application/json",
                     "Authorization": f"Bearer {access_token}",
                 },
             ).text
