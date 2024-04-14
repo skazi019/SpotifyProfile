@@ -1,2 +1,8 @@
 Not Found: /favicon.ico
 "GET /favicon.ico HTTP/1.1" 404 2219
+Not Found: /
+"GET / HTTP/1.1" 404 2168
+Not Found: /favicon.ico
+"GET /favicon.ico HTTP/1.1" 404 2219
+Not Found: //user
+"GET //user HTTP/1.1" 404 2201
